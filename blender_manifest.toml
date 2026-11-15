@@ -1,0 +1,37 @@
+schema_version = "1.0.0"
+
+# Change these for each new tool. id must be unique, lowercase, underscores only.
+# Keep the setside_ prefix so ids never clash with other people's add-ons.
+id = "setside_faces_to_lights"
+version = "1.0.0"
+name = "Set-Side Faces to Lights"
+tagline = "Turn selected mesh faces into matching area lights"
+maintainer = "Set-Side"
+type = "add-on"
+website = "https://github.com/Set-Side/faces-to-lights"
+tags = ["Lighting", "Render", "Mesh"]
+
+blender_version_min = "4.2.0"
+
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
+copyright = [
+  "2026 Set-Side",
+]
+
+# Files to leave out of the extension zip
+[build]
+paths_exclude_pattern = [
+  "__pycache__/",
+  "/.git/",
+  "/.vscode/",
+  "/dist/",
+  "/tests/",
+  "/test_data/",
+  "/*.zip",
+  "/build.sh",
+  "/.gitignore",
+  "/README.md",
+  "/ROADMAP.md",
+]
