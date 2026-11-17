@@ -264,6 +264,28 @@ def fit_light(light_obj, frame, flip, offset, purpose='EMIT', scale=1.0):
         light_obj.matrix_world = target
 
 
+GLOW_LOOKS_ONLY = "SetSide Glow For Camera And Reflections"
+
+
+def glow_for_looks_only(nodes, links, shader_out, x, y):
+    """Route a glow so the camera and reflections see it, but light bouncing
+    off it is black: the area lights do the lighting, cleanly and without
+    noise, and the glow is only there to look lit on camera."""
+    path = nodes.new("ShaderNodeLightPath")
+    path.location = (x - 420, y + 260)
+    either = nodes.new("ShaderNodeMath")
+    either.operation = 'MAXIMUM'
+    either.location = (x - 220, y + 200)
+    links.new(path.outputs["Is Camera Ray"], either.inputs[0])
+    links.new(path.outputs["Is Glossy Ray"], either.inputs[1])
+    mix = nodes.new("ShaderNodeMixShader")
+    mix.name = mix.label = GLOW_LOOKS_ONLY
+    mix.location = (x, y)
+    links.new(either.outputs[0], mix.inputs["Fac"])
+    links.new(shader_out, mix.inputs[2])  # input 1 left empty: black for bounce light
+    return mix.outputs[0]
+
+
 def make_emission_material(name, color, strength, casts_light):
     """An emission material. casts_light=False makes it glow without acting
     as a light source in Cycles (just for looks)."""
@@ -282,8 +304,13 @@ def make_emission_material(name, color, strength, casts_light):
     emission = nodes.new("ShaderNodeEmission")
     emission.name = emission.label = GLOW_EMISSION
     output = nodes.new("ShaderNodeOutputMaterial")
+    output.location = (200, 0)
     emission.location = (-200, 0)
-    links.new(emission.outputs["Emission"], output.inputs["Surface"])
+    if casts_light:
+        links.new(emission.outputs["Emission"], output.inputs["Surface"])
+    else:
+        links.new(glow_for_looks_only(nodes, links, emission.outputs["Emission"], 0, 0),
+                  output.inputs["Surface"])
     # The colour lives in its own node, so Variation can tint it per face
     base = nodes.new("ShaderNodeRGB")
     base.name = base.label = GLOW_BASE
@@ -1432,6 +1459,11 @@ class SETSIDE_PT_faces_to_lights(bpy.types.Panel):
 
         layout.label(text="After creating, adjust options in", icon='BLANK1')
         layout.label(text="the panel at the bottom left", icon='BLANK1')
+        shading = getattr(context.space_data, "shading", None)
+        if shading is not None and (shading.type in {'SOLID', 'WIREFRAME'} or (
+                shading.type == 'MATERIAL' and not shading.use_scene_lights)):
+            layout.label(text="Lights don't show in this view:", icon='INFO')
+            layout.label(text="switch to Rendered view to see them", icon='BLANK1')
 
         # Edit lights that already exist
         box = layout.box()

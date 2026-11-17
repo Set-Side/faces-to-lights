@@ -3,7 +3,7 @@ schema_version = "1.0.0"
 # Change these for each new tool. id must be unique, lowercase, underscores only.
 # Keep the setside_ prefix so ids never clash with other people's add-ons.
 id = "setside_faces_to_lights"
-version = "1.0.0"
+version = "1.0.1"
 name = "Set-Side Faces to Lights"
 tagline = "Turn selected mesh faces into matching area lights"
 maintainer = "Set-Side"
