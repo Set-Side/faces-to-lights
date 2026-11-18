@@ -2,12 +2,14 @@
 
 Turn selected mesh faces into matching area lights in Blender: same position, direction and size, with the faces glowing to match. Made for windows, light panels, screens, signs and any lit surface you've modelled.
 
+**[Get it free on Blender Extensions](https://extensions.blender.org/add-ons/setside-faces-to-lights/)**
+
 Free and open source (GPL-3.0-or-later). Works with Blender 4.2 LTS and newer, in Cycles and EEVEE.
 
 ## Install
 
 - **In Blender:** Edit > Preferences > Get Extensions, search for "Faces to Lights", click Install.
-- **From a file:** download the zip from [Blender Extensions](https://extensions.blender.org/), then drag it into Blender, or use Preferences > Add-ons > Install from Disk.
+- **From a file:** download the zip from its [Blender Extensions page](https://extensions.blender.org/add-ons/setside-faces-to-lights/), then drag it into Blender, or use Preferences > Add-ons > Install from Disk.
 
 ## Quick start
 
